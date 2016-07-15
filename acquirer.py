@@ -4,6 +4,8 @@ import pygame.image
 import os
 import time
 import json
+import sys
+import requests
 # global declarations
 global conf
 conf = json.load(open("./config.json"))
@@ -13,10 +15,20 @@ color_table = {
     "yellow": pygame.Color(conf["colors"]["yellow"]),
     "red": pygame.Color(conf["colors"]["red"])
 }
+global tmp_path
+if os.name == "os2":  # unix
+    tmp_path = "/tmp"
+elif os.name == "nt":  # windows
+    tmp_path = os.path.join(os.path.splitdrive(sys.executable)[0],
+                            "windows", "temp")
+else:  # some other weird system like riscos
+    raise NotImplementedError("Unknown system type: "+os.name)
 
 
 def download(path, url):
-    os.popen("wget -O "+path+" "+url+" 2>/dev/null").read()  # halting call
+    r = requests.get(url)
+    with open(path, "wb") as code:
+        code.write(r.content)
 
 
 def get_pix(path, pix):
@@ -33,8 +45,10 @@ def get_pix(path, pix):
 
 def log():
     global conf
-    out = open("/tmp/.last_traffic", "w")
-    out.write(str(time.time())+":"+get_pix("/tmp/img.png", conf["pix"]))
+    global tmp_path
+    out = open(tmp_path+os.sep+".last_traffic", "w")
+    out.write(str(time.time())+":"+get_pix(tmp_path+os.sep+"img.png",
+                                           conf["pix"]))
     out.flush()
     out.close()
 
