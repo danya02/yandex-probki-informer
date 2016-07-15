@@ -1,6 +1,14 @@
 {
   "url": "http://info.maps.yandex.net/traffic/moscow/tends_200.png",
   "pix": [46,67],
+  "update-sec":300,
+  "debug":true,
+  "pins":{
+    "red":null,
+    "green":null,
+    "blue":null,
+    "common-cathode":true
+  },
   "colors": {
     "red":    "#ff0000",
     "yellow": "#ff6600",
