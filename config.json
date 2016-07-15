@@ -1,0 +1,9 @@
+{
+  "url": "http://info.maps.yandex.net/traffic/moscow/tends_200.png",
+  "pix": [46,67],
+  "colors": {
+    "red":    "#ff0000",
+    "yellow": "#ff6600",
+    "green":  "#009a22"
+    }
+}

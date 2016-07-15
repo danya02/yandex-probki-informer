@@ -3,22 +3,25 @@ import pygame
 import pygame.image
 import os
 import time
+import json
 # global declarations
+global conf
+conf = json.load(open("./config.json"))
 global color_table
 color_table = {
-    "green": pygame.Color(0, 154, 34, 255),
-    "yellow": pygame.Color(255, 102, 0, 255),
-    "red": pygame.Color(255, 0, 0, 255)
+    "green": pygame.Color(conf["colors"]["green"]),
+    "yellow": pygame.Color(conf["colors"]["yellow"]),
+    "red": pygame.Color(conf["colors"]["red"])
 }
 
 
-def download(path="/tmp/img.png",
-             url="http://info.maps.yandex.net/traffic/moscow/tends_200.png"):
-    os.popen("wget -O "+path+" "+url).read()
+def download(path, url):
+    os.popen("wget -O "+path+" "+url+" 2>/dev/null").read()  # halting call
 
 
-def get_pix(path="/tmp/img.png", pix=(46, 67)):
-    download()
+def get_pix(path, pix):
+    global conf
+    download(path, conf["url"])
     img = pygame.image.load(path)
     global color_table
     for i in color_table:
@@ -29,8 +32,9 @@ def get_pix(path="/tmp/img.png", pix=(46, 67)):
 
 
 def log():
+    global conf
     out = open("/tmp/.last_traffic", "w")
-    out.write(str(time.time())+":"+get_pix())
+    out.write(str(time.time())+":"+get_pix("/tmp/img.png", conf["pix"]))
     out.flush()
     out.close()
 
