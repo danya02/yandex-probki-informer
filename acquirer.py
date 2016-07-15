@@ -31,6 +31,9 @@ def get_pix(path="/tmp/img.png", pix=(46, 67)):
 def log():
     out = open("/tmp/.last_traffic", "w")
     out.write(str(time.time())+":"+get_pix())
+    out.flush()
+    out.close()
+
 
 if __name__ == "__main__":
     log()
