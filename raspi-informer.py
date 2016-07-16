@@ -79,6 +79,10 @@ while 1:
     led.on()
     os.popen("./acquirer.py").read()
     o = open(tmp_path+os.sep+".last_traffic").read().split(":")[1]
-    led.color = [(1 if o == "red" else 0), (1 if o == "green" else 0),
-                 (1 if o == "blue" else 0)]
+    led.color = [(conf["pins"]["common-cathode"] if o == "red" else
+                  (not conf["pins"]["common-cathode"])),
+                 (conf["pins"]["common-cathode"] if o == "red" else
+                  (not conf["pins"]["common-cathode"])),
+                 (conf["pins"]["common-cathode"] if o == "red" else
+                  (not conf["pins"]["common-cathode"]))]
     time.sleep(conf["update-sec"])  # not to spam the server and get us banned
