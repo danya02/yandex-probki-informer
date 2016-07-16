@@ -6,6 +6,7 @@ import time
 import json
 import sys
 import requests
+import numpy
 # global declarations
 global conf
 conf = json.load(open("./config.json"))
@@ -37,10 +38,8 @@ def download(path, url):
         code.write(r.content)
 
 
-def get_pix(path, pix):
+def get_pix(img, pix):
     global conf
-    download(path, conf["url"])
-    img = pygame.image.load(path)
     global color_table
     for i in color_table:
         if img.get_at(pix) == color_table[i]:
@@ -49,12 +48,28 @@ def get_pix(path, pix):
         img.get_at(pix)))
 
 
+def get_arrows(img):
+    global conf
+    offset = 0
+    try:
+        while 1:
+            get_pix(img, (conf["pix"][0]+offset, conf["pix"][1]))
+            offset += 1
+            if conf["debug"]:
+                print(offset)
+    except:
+        pass
+    return offset/pygame.image.load("arrow.gif").get_width()
+
+
 def log():
     global conf
     global tmp_path
+    download(tmp_path+os.sep+"img.png", conf["url"])
     out = open(tmp_path+os.sep+".last_traffic", "w")
-    out.write(str(time.time())+":"+get_pix(tmp_path+os.sep+"img.png",
-                                           conf["pix"]))
+    out.write(str(time.time())+":"+get_pix(
+        pygame.image.load(tmp_path+os.sep+"img.png"), conf["pix"])+","+str(
+            get_arrows(pygame.image.load(tmp_path+os.sep+"img.png"))))
     out.flush()
     out.close()
 
