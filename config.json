@@ -5,8 +5,8 @@
   "debug":true,
   "pins":{
     "red":null,
+    "yellow":null,
     "green":null,
-    "blue":null,
     "common-cathode":true
   },
   "colors": {

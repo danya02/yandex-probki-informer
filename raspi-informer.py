@@ -64,8 +64,8 @@ global conf
 conf = json.load("./conf.json")
 global led
 try:
-    led = RGBLED(conf["pins"]["red"], conf["pins"]["green"],
-                 conf["pins"]["blue"])
+    led = RGBLED(conf["pins"]["red"], conf["pins"]["yellow"],
+                 conf["pins"]["green"])
 except KeyError:
     print("Please configure the GPIO pins in config.json")
 if os.name == "os2" or os.name == "posix":  # unix
