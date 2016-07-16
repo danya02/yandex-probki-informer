@@ -4,6 +4,8 @@ import json
 import os
 import sys
 import time
+import random
+import threading
 
 
 class RGBLED:
@@ -75,14 +77,56 @@ elif os.name == "nt":  # windows
                             "windows", "temp")
 else:  # some other weird system like riscos
     raise NotImplementedError("Unknown system type: "+os.name)
+global status
+status = 1
+global leds
+leds = [not conf["pins"]["common-cathode"],
+        not conf["pins"]["common-cathode"],
+        not conf["pins"]["common-cathode"]]
+
+
+def blinker():
+    global status
+    global leds
+    global conf
+    all_seq = []
+    for i in range(0, 7):
+        all_seq = all_seq+[int(bin(i)[0]),
+                           int(bin(i)[1]),
+                           int(bin(i)[2])]
+    while 1:
+        if status == 0:
+            led.color = leds
+        elif status == 1:
+            led.color = [conf["pins"]["common-cathode"]]*3
+        elif status == -1:
+            led.color = random.choice(all_seq)
+        if conf["debug"]:
+            if status == -1:
+                print("STATUS: borked ", end="")
+            elif status == 0:
+                print("STATUS: enabled ", end="")
+            elif status == 1:
+                print("STATUS: updating ", end="")
+            print(str(led.color))
+        time.sleep(0.5)  # not to allow the CPU to overhet
+
+blinkenlights = threading.Thread(target=blinker, name="blinkenlights")
+blinkenlights.daemon = True
+blinkenlights.start()
+
 while 1:
-    led.on()
-    os.popen("./acquirer.py").read()
-    o = open(tmp_path+os.sep+".last_traffic").read().split(":")[1]
-    led.color = [(conf["pins"]["common-cathode"] if o == "red" else
-                  (not conf["pins"]["common-cathode"])),
-                 (conf["pins"]["common-cathode"] if o == "red" else
-                  (not conf["pins"]["common-cathode"])),
-                 (conf["pins"]["common-cathode"] if o == "red" else
-                  (not conf["pins"]["common-cathode"]))]
-    time.sleep(conf["update-sec"])  # not to spam the server and get us banned
+    status = 1
+    try:
+        os.popen("./acquirer.py").read()
+        o = open(tmp_path+os.sep+".last_traffic").read().split(":")[1]
+        leds = [(conf["pins"]["common-cathode"] if o == "red" else
+                 (not conf["pins"]["common-cathode"])),
+                (conf["pins"]["common-cathode"] if o == "yellow" else
+                 (not conf["pins"]["common-cathode"])),
+                (conf["pins"]["common-cathode"] if o == "green" else
+                 (not conf["pins"]["common-cathode"]))]
+    except:
+        status = -1  # meaning the system has been borked
+    time.sleep(conf["update-sec"]  # not to spam the server and get us banned
+               if status > -1 else 5)  # in case we've run into a disconnect
