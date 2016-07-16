@@ -8,7 +8,7 @@ import threading
 
 
 global conf
-conf = json.load("./conf.json")
+conf = json.load(open("./conf.json"))
 conf["debug"] = True
 for i in sys.argv:
     try:

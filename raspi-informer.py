@@ -63,7 +63,7 @@ class RGBLED:
         self.color = [0, 0, 0]
 
 global conf
-conf = json.load("./conf.json")
+conf = json.load(open("./conf.json"))
 global led
 try:
     led = RGBLED(conf["pins"]["red"], conf["pins"]["yellow"],
