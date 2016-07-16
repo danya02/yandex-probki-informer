@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-from RPi import GPIO as gpio
 import json
 import os
 import sys
