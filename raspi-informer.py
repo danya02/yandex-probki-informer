@@ -129,6 +129,7 @@ while 1:
                  (not conf["pins"]["common-cathode"])),
                 (conf["pins"]["common-cathode"] if o == "green" else
                  (not conf["pins"]["common-cathode"]))]
+        status=0
     except:
         status = -1  # meaning the system has been borked
     time.sleep(conf["update-sec"]  # not to spam the server and get us banned
