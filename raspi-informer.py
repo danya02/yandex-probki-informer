@@ -68,7 +68,7 @@ try:
                  conf["pins"]["blue"])
 except KeyError:
     print("Please configure the GPIO pins in config.json")
-if os.name == "os2":  # unix
+if os.name == "os2" or os.name == "posix":  # unix
     tmp_path = "/tmp"
 elif os.name == "nt":  # windows
     tmp_path = os.path.join(os.path.splitdrive(sys.executable)[0],

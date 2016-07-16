@@ -11,12 +11,18 @@ global conf
 conf = json.load(open("./config.json"))
 global color_table
 color_table = {
-    "green": pygame.Color(conf["colors"]["green"]),
-    "yellow": pygame.Color(conf["colors"]["yellow"]),
-    "red": pygame.Color(conf["colors"]["red"])
+    "green": pygame.Color(conf["colors"]["green"]["r"],
+                          conf["colors"]["green"]["g"],
+                          conf["colors"]["green"]["b"], 255),
+    "yellow": pygame.Color(conf["colors"]["yellow"]["r"],
+                           conf["colors"]["yellow"]["g"],
+                           conf["colors"]["yellow"]["b"], 255),
+    "red": pygame.Color(conf["colors"]["red"]["r"],
+                        conf["colors"]["red"]["g"],
+                        conf["colors"]["red"]["b"], 255)
 }
 global tmp_path
-if os.name == "os2":  # unix
+if os.name == "os2" or os.name == "posix":  # unix
     tmp_path = "/tmp"
 elif os.name == "nt":  # windows
     tmp_path = os.path.join(os.path.splitdrive(sys.executable)[0],
