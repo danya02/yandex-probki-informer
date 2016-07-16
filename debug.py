@@ -36,9 +36,9 @@ def blinker():
     global conf
     all_seq = []
     for i in range(0, 7):
-        all_seq = all_seq+[int(bin(i)[0]),
-                           int(bin(i)[1]),
-                           int(bin(i)[2])]
+        all_seq = all_seq+[int(bin(i)[2:][0]),
+                           int(bin(i)[2:][1]),
+                           int(bin(i)[2:][2])]
     led_color = [0, 0, 0]
     while 1:
         if status == 0:
