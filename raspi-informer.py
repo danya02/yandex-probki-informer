@@ -86,6 +86,7 @@ leds = [not conf["pins"]["common-cathode"],
 
 
 def blinker():
+    global led
     global status
     global leds
     global conf
