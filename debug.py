@@ -55,7 +55,7 @@ def blinker():
                 print("STATUS: enabled ", end="")
             elif status == 1:
                 print("STATUS: updating ", end="")
-            print(str(led.color))
+            print(str(led_color))
         time.sleep(0.5)  # not to allow the CPU to overhet
 
 blinkenlights = threading.Thread(target=blinker, name="blinkenlights")
