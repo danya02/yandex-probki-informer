@@ -69,7 +69,7 @@ try:
     led = RGBLED(conf["pins"]["red"], conf["pins"]["yellow"],
                  conf["pins"]["green"])
 except KeyError:
-    print("Please configure the GPIO pins in config.json")
+    os.execv("./gpio-setup.py", [])
 if os.name == "os2" or os.name == "posix":  # unix
     tmp_path = "/tmp"
 elif os.name == "nt":  # windows
