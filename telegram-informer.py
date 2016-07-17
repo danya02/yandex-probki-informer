@@ -3,11 +3,12 @@
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters,\
     CallbackQueryHandler
-from telegram import ForceReply, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 import logging
 import json
 import threading
 import os
+import sys
 
 # Enable logging
 logging.basicConfig(
@@ -54,7 +55,6 @@ def confirm_value(bot, update):
     user_id = query.from_user.id
     text = query.data
     user_state = state.get(user_id, AWAIT_INPUT)
-    user_context = context.get(user_id, None)
 
     # Check if we are waiting for confirmation and the right user answered
     if user_state == AWAIT_CONFIRMATION:
@@ -145,7 +145,7 @@ def sender():
          time.localtime(time.time())[4] < 59:
             sent = False
         if time.localtime(time.time())[3] == 17 and \
-         time.localtime(time.time())[4] == 0:
+         time.localtime(time.time())[4] == 0 and not sent:
             sent = True
             for i in values:
                 try:
@@ -156,12 +156,15 @@ def sender():
 sender_thread = threading.Thread(target=sender, name="sender")
 sender_thread.start()
 
+
 def status(bot, update):
     global qbot
     qbot = bot
     global cong
     bot.sendMessage(update.message.chat_id,
                     text="Current traffic status: "+str(cong)+"/10")
+
+
 def main():
     # Create the EventHandler and pass it your bot's token.
     updater = Updater("135232412:AAFfA6JImKl4sxv35IAw2f2Zjq7gb67Jk7Q")

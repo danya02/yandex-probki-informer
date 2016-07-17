@@ -6,7 +6,6 @@ import time
 import json
 import sys
 import requests
-import numpy
 # global declarations
 global conf
 conf = json.load(open("./config.json"))
