@@ -144,15 +144,14 @@ def sender():
         if time.localtime(time.time())[3] < 17 and \
          time.localtime(time.time())[4] < 59:
             sent = False
-        if time.localtime(time.time())[3] == 17 and \
-         time.localtime(time.time())[4] == 0 and not sent:
+        if time.localtime(time.time())[3] >= 17 and cong < 7 and not sent:
             sent = True
             for i in values:
                 try:
                     qbot.sendMessage(values[i], text="Your registered update has occurred: the level of traffic congestion is now lower than 7.")
                 except:
                     print("error on", str(values[i]))
-    time.sleep(30)
+        time.sleep(30)
 sender_thread = threading.Thread(target=sender, name="sender")
 sender_thread.start()
 
