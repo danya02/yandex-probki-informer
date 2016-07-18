@@ -3,7 +3,7 @@
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters,\
     CallbackQueryHandler
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Bot
 import logging
 import json
 import threading
@@ -28,8 +28,6 @@ except:
 
 
 def entered_value(bot, update):
-    global qbot
-    qbot = bot
     chat_id = update.message.chat_id
     user_id = update.message.from_user.id
     chat_state = state.get(user_id, AWAIT_INPUT)
@@ -48,8 +46,6 @@ def entered_value(bot, update):
 
 
 def confirm_value(bot, update):
-    global qbot
-    qbot = bot
     query = update.callback_query
     chat_id = query.message.chat_id
     user_id = query.from_user.id
@@ -83,15 +79,11 @@ def confirm_value(bot, update):
 
 
 def start(bot, update):
-    global qbot
-    qbot = bot
     bot.sendMessage(update.message.chat_id,
                     text="Welcome to Yandex.Probki notification service. Select /help for help.")
 
 
 def help(bot, update):
-    global qbot
-    qbot = bot
     bot.sendMessage(update.message.chat_id, text="""/help - command list
 /registration - toggle notifications
 /status - get current traffic congestion""")
@@ -136,33 +128,37 @@ loader_thread.start()
 
 global send_now
 send_now = False
+global some_condition
+some_condition = False
 
 
 def sender():
+    global some_condition
     sent = False
-    global qbot
+    bot = Bot(token="135232412:AAFfA6JImKl4sxv35IAw2f2Zjq7gb67Jk7Q")
     import time
     global cong
     global send_now
     while 1:
-        if time.localtime(time.time())[3] < 17:
+        if time.localtime(time.time())[3] == 16 and \
+          time.localtime(time.time())[4] == 59 and \
+          time.localtime(time.time())[5] == 59:
             sent = False
-        if send_now or time.localtime(time.time())[3] >= 17 and cong < 7 and not sent:
+        #if send_now or time.localtime(time.time())[3] >= 17 and cong < 7 and not sent:
+        if some_condition and not sent:
             sent = True
             send_now = False
             for i in values:
                 try:
-                    qbot.sendMessage(i, text="Your registered update has occurred: the level of traffic congestion is now lower than 7.")
+                    bot.sendMessage(i, text="Your registered update has occurred: the level of traffic congestion is now lower than 7.")
                 except:
                     print("error on", str(i))
-        time.sleep(30)
+        time.sleep(1)
 sender_thread = threading.Thread(target=sender, name="sender")
 sender_thread.start()
 
 
 def status(bot, update):
-    global qbot
-    qbot = bot
     global cong
     bot.sendMessage(update.message.chat_id,
                     text="Current traffic status: "+str(cong)+"/10")
@@ -181,7 +177,9 @@ def send_now_do(bot, update):
     global send_now
     send_now = True
 
-
+def set_val(a,b):
+    global some_condition
+    some_condition = True
 def main():
     # Create the EventHandler and pass it your bot's token.
     updater = Updater("135232412:AAFfA6JImKl4sxv35IAw2f2Zjq7gb67Jk7Q")
@@ -195,6 +193,7 @@ def main():
     dp.add_handler(CommandHandler("registration", entered_value))
     dp.add_handler(CommandHandler("status", status))
     dp.add_handler(CommandHandler("send", send_now_do))
+    dp.add_handler(CommandHandler("set", set_val))
     # on noncommand i.e message - echo the message on Telegram
     dp.add_handler(MessageHandler([Filters.text], entered_value))
     updater.dispatcher.add_handler(CallbackQueryHandler(confirm_value))
