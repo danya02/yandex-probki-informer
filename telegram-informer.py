@@ -80,6 +80,9 @@ def confirm_value(bot, update):
         bot.editMessageText(text=txt_long,
                             chat_id=chat_id,
                             message_id=query.message.message_id)
+        if txt_long == "You are now registered.":
+            bot.sendMessage(update.message.chat_id,
+                            text="To recieve updates, please do not close this chat window and do not push the `Stop Bot` button.")
 
 
 def start(bot, update):
@@ -162,6 +165,15 @@ def status(bot, update):
     global cong
     bot.sendMessage(update.message.chat_id,
                     text="Current traffic status: "+str(cong)+"/10")
+    bot.sendImage(update.message.chat_id, json.load(open("./config.json"))["url"])
+    query = update.callback_query
+    if not values[query.from_user.id]:
+            bot.sendMessage(update.message.chat_id,
+                            text="Don't want to check this value every so often? Sign up for notifications!")
+            bot.sendMessage(update.message.chat_id,
+                            text="This bot will send you a message after 17:00 when the level of traffic congestion will be below 7.")
+            bot.sendMessage(update.message.chat_id,
+                            text="Select the /register command to register for updates.")
 
 
 def main():
