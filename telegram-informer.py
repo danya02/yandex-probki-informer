@@ -167,7 +167,7 @@ def status(bot, update):
     global cong
     bot.sendMessage(update.message.chat_id,
                     text="Current traffic status: "+str(cong)+"/10")
-    bot.sendImage(update.message.chat_id, json.load(open("./config.json"))["url"])
+    bot.sendPhoto(update.message.chat_id, json.load(open("./config.json"))["url"])
     query = update.callback_query
     if query.from_user.id not in values:
             bot.sendMessage(update.message.chat_id,
