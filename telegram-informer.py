@@ -61,7 +61,7 @@ def confirm_value(bot, update):
         del state[user_id]
         del context[user_id]
         if text == YES:
-            if values.get(user_id, False):
+            if values.index(user_id)>0:
                 txt = "Unregistered!"
                 txt_long = "You are no longer registered."
                 values.remove(user_id)
@@ -96,8 +96,7 @@ def help(bot, update):
     global qbot
     qbot = bot
     bot.sendMessage(update.message.chat_id, text="""/help - command list
-/register - sign up for updates
-/unregister - disable updates
+/registration - toggle notifications
 /status - get current traffic congestion""")
 
 
@@ -179,7 +178,7 @@ def status(bot, update):
             bot.sendMessage(update.message.chat_id,
                             text="This bot will send you a message after 17:00 when the level of traffic congestion will be below 7.")
             bot.sendMessage(update.message.chat_id,
-                            text="Select the /register command to register for updates.")
+                            text="Select the /registration command to register for updates.")
 
 
 def send_now_do(bot, update):
@@ -197,8 +196,7 @@ def main():
     # on different commands - answer in Telegram
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("help", help))
-    dp.add_handler(CommandHandler("register", entered_value))
-    dp.add_handler(CommandHandler("unregister", entered_value))
+    dp.add_handler(CommandHandler("registration", entered_value))
     dp.add_handler(CommandHandler("status", status))
     dp.add_handler(CommandHandler("send", send_now_do))
     # on noncommand i.e message - echo the message on Telegram
