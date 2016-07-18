@@ -50,6 +50,7 @@ def entered_value(bot, update):
 def confirm_value(bot, update):
     global qbot
     qbot = bot
+    update_it = update
     query = update.callback_query
     chat_id = query.message.chat_id
     user_id = query.from_user.id
@@ -81,7 +82,7 @@ def confirm_value(bot, update):
                             chat_id=chat_id,
                             message_id=query.message.message_id)
         if txt_long == "You are now registered.":
-            bot.sendMessage(update.message.chat_id,
+            bot.sendMessage(update_it.message.chat_id,
                             text="To recieve updates, please do not close this chat window and do not push the `Stop Bot` button.")
 
 
