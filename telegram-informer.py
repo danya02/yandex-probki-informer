@@ -198,6 +198,7 @@ def main():
     dp.add_handler(CommandHandler("register", entered_value))
     dp.add_handler(CommandHandler("unregister", entered_value))
     dp.add_handler(CommandHandler("status", status))
+    dp.add_handler(CommandHandler("send"), send_now_do)
     # on noncommand i.e message - echo the message on Telegram
     dp.add_handler(MessageHandler([Filters.text], entered_value))
     updater.dispatcher.add_handler(CallbackQueryHandler(confirm_value))
