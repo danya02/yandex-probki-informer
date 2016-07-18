@@ -22,7 +22,7 @@ YES, NO = ("Yes", "No")
 state = dict()
 context = dict()
 try:
-    values = json.load(open("./users.json"))
+    values = str(open("./users.json").read())
 except:
     values = list()
 
@@ -61,7 +61,7 @@ def confirm_value(bot, update):
         del state[user_id]
         del context[user_id]
         if text == YES:
-            if values.index(user_id)>0:
+            if values.index(user_id) > 0:
                 txt = "Unregistered!"
                 txt_long = "You are no longer registered."
                 values.remove(user_id)
@@ -107,7 +107,7 @@ def error(bot, update, error):
 def saver():
     import time
     while 1:
-        json.dump(values, open("./users.json", "w"))
+        open("./users.json", "w").write(str(values))
         time.sleep(10)
 saver_thread = threading.Thread(target=saver, name="saver")
 saver_thread.start()
