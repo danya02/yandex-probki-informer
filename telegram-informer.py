@@ -61,7 +61,7 @@ def confirm_value(bot, update):
         del state[user_id]
         del context[user_id]
         if text == YES:
-            if values.index(user_id) > 0:
+            if values.count(user_id) > 0:
                 txt = "Unregistered!"
                 txt_long = "You are no longer registered."
                 values.remove(user_id)
