@@ -22,7 +22,7 @@ YES, NO = ("Yes", "No")
 state = dict()
 context = dict()
 try:
-    values = str(open("./users.json").read())
+    values = list(open("./users.json").read())
 except:
     values = list()
 
@@ -61,7 +61,8 @@ def confirm_value(bot, update):
         del state[user_id]
         del context[user_id]
         if text == YES:
-            if values.count(user_id) > 0:
+            print(user_id,values)
+            if values.count(str(user_id)) > 0:
                 txt = "Unregistered!"
                 txt_long = "You are no longer registered."
                 values.remove(user_id)
