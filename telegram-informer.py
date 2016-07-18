@@ -138,17 +138,22 @@ def loader():
 loader_thread = threading.Thread(target=loader, name="loader")
 loader_thread.start()
 
+global send_now
+send_now = False
+
 
 def sender():
     global qbot
     import time
     global cong
+    global send_now
     while 1:
         if time.localtime(time.time())[3] < 17 and \
          time.localtime(time.time())[4] < 59:
             sent = False
-        if time.localtime(time.time())[3] >= 17 and cong < 7 and not sent:
+        if send_now or time.localtime(time.time())[3] >= 17 and cong < 7 and not sent:
             sent = True
+            send_now = False
             for i in values:
                 try:
                     qbot.sendMessage(i, text="Your registered update has occurred: the level of traffic congestion is now lower than 7.")
@@ -174,6 +179,10 @@ def status(bot, update):
                             text="This bot will send you a message after 17:00 when the level of traffic congestion will be below 7.")
             bot.sendMessage(update.message.chat_id,
                             text="Select the /register command to register for updates.")
+
+def send_now_do(bot, update):
+    global send_now
+    send_now = True
 
 
 def main():
