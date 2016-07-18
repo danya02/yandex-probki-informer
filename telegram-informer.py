@@ -22,7 +22,7 @@ YES, NO = ("Yes", "No")
 state = dict()
 context = dict()
 try:
-    values = list(open("./users.json").read())
+    values = eval(open("./users.json").read())
 except:
     values = list()
 
@@ -61,19 +61,18 @@ def confirm_value(bot, update):
         del state[user_id]
         del context[user_id]
         if text == YES:
-            print(user_id,values)
-            if values.count(str(user_id)) > 0:
+            if values.count(user_id) > 0:
                 txt = "Unregistered!"
                 txt_long = "You are no longer registered."
                 values.remove(user_id)
             else:
                 txt = "Registered!"
-                txt_long = "You are now registered."
+                txt_long = "You are now registered.  To recieve updates, please do not close this chat window and do not push the `Stop Bot` button."
                 values.append(user_id)
         else:
             txt = "Not changed!"
             if user_id in values:
-                txt_long = "You are still registered. To recieve updates, please do not close this chat window and do not push the `Stop Bot` button."
+                txt_long = "You are still registered."
             else:
                 txt_long = "You are still unregistered."
         bot.answerCallbackQuery(query.id, text=txt)
@@ -146,8 +145,7 @@ def sender():
     global cong
     global send_now
     while 1:
-        if time.localtime(time.time())[3] < 17 and \
-         time.localtime(time.time())[4] < 59:
+        if time.localtime(time.time())[3] < 17:
             sent = False
         if send_now or time.localtime(time.time())[3] >= 17 and cong < 7 and not sent:
             sent = True
@@ -169,13 +167,13 @@ def status(bot, update):
     bot.sendMessage(update.message.chat_id,
                     text="Current traffic status: "+str(cong)+"/10")
     bot.sendPhoto(update.message.chat_id, json.load(open("./config.json"))["url"])
-    query = update.callback_query
-    if query.from_user.id not in values:
-            bot.sendMessage(update.message.chat_id,
+    # query = update.callback_query
+    if update.to_dict()["message"]["from"]["id"] not in values:
+            bot.sendMessage(update.to_dict()["message"]["chat"]["id"],
                             text="Don't want to check this value every so often? Sign up for notifications!")
-            bot.sendMessage(update.message.chat_id,
+            bot.sendMessage(update.to_dict()["message"]["chat"]["id"],
                             text="This bot will send you a message after 17:00 when the level of traffic congestion will be below 7.")
-            bot.sendMessage(update.message.chat_id,
+            bot.sendMessage(update.to_dict()["message"]["chat"]["id"],
                             text="Select the /registration command to register for updates.")
 
 
