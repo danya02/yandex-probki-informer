@@ -24,7 +24,7 @@ context = dict()
 try:
     values = json.load(open("./users.json"))
 except:
-    values = dict()
+    values = list()
 
 
 def entered_value(bot, update):
@@ -64,14 +64,14 @@ def confirm_value(bot, update):
             if values.get(user_id, False):
                 txt = "Unregistered!"
                 txt_long = "You are no longer registered."
-                del values[user_id]
+                values.remove(user_id)
             else:
                 txt = "Registered!"
                 txt_long = "You are now registered."
-                values[user_id] = chat_id
+                values.append(user_id)
         else:
             txt = "Not changed!"
-            if values.get(user_id, False):
+            if user_id in values:
                 txt_long = "You are still registered."
             else:
                 txt_long = "You are still unregistered."
@@ -151,9 +151,9 @@ def sender():
             sent = True
             for i in values:
                 try:
-                    qbot.sendMessage(values[i], text="Your registered update has occurred: the level of traffic congestion is now lower than 7.")
+                    qbot.sendMessage(i, text="Your registered update has occurred: the level of traffic congestion is now lower than 7.")
                 except:
-                    print("error on", str(values[i]))
+                    print("error on", str(i))
         time.sleep(30)
 sender_thread = threading.Thread(target=sender, name="sender")
 sender_thread.start()
@@ -167,7 +167,7 @@ def status(bot, update):
                     text="Current traffic status: "+str(cong)+"/10")
     bot.sendImage(update.message.chat_id, json.load(open("./config.json"))["url"])
     query = update.callback_query
-    if not values[query.from_user.id]:
+    if query.from_user.id not in values:
             bot.sendMessage(update.message.chat_id,
                             text="Don't want to check this value every so often? Sign up for notifications!")
             bot.sendMessage(update.message.chat_id,
