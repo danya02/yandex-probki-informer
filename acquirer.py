@@ -19,7 +19,10 @@ color_table = {
                            conf["colors"]["yellow"]["b"], 255),
     "red": pygame.Color(conf["colors"]["red"]["r"],
                         conf["colors"]["red"]["g"],
-                        conf["colors"]["red"]["b"], 255)
+                        conf["colors"]["red"]["b"], 255),
+    "void": pygame.Color(conf["colors"]["void"]["r"],
+                        conf["colors"]["void"]["g"],
+                        conf["colors"]["void"]["b"], 255),
 }
 global tmp_path
 if os.name == "os2" or os.name == "posix":  # unix
@@ -66,8 +69,9 @@ def log():
     global tmp_path
     download(tmp_path+os.sep+"img.png", conf["url"])
     out = open(tmp_path+os.sep+".last_traffic", "w")
-    out.write(str(time.time())+":"+get_pix(
-        pygame.image.load(tmp_path+os.sep+"img.png"), conf["pix"])+","+str(
+    o = get_pix(pygame.image.load(tmp_path+os.sep+"img.png"), conf["pix"])
+    o = "green" if o == "void" else o
+    out.write(str(time.time())+":"+o+","+str(
             get_arrows(pygame.image.load(tmp_path+os.sep+"img.png"))))
     out.flush()
     out.close()
