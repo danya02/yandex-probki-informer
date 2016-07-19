@@ -1,5 +1,6 @@
 {
   "url": "http://info.maps.yandex.net/traffic/moscow/tends_200.png",
+  "token":"TOKEN GOES HERE",
   "pix": [46,67],
   "update-sec":300,
   "debug":true,

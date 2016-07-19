@@ -129,7 +129,7 @@ loader_thread.start()
 
 def sender():
     sent = False
-    bot = Bot(token="135232412:AAFfA6JImKl4sxv35IAw2f2Zjq7gb67Jk7Q")
+    bot = Bot(token=json.load(open("config.json")["token"]))
     import time
     global cong
     global send_now
