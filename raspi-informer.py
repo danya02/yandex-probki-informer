@@ -122,7 +122,7 @@ while 1:
     status = 1
     try:
         os.popen("./acquirer.py").read()
-        o = open(tmp_path+os.sep+".last_traffic").read().split(":")[1]
+        o = open(tmp_path+os.sep+".last_traffic").read().split(":")[1].split(",")[0]
         leds = [(conf["pins"]["common-cathode"] if o == "red" else
                  (not conf["pins"]["common-cathode"])),
                 (conf["pins"]["common-cathode"] if o == "yellow" else
