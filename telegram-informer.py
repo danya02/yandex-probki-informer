@@ -126,14 +126,8 @@ def loader():
 loader_thread = threading.Thread(target=loader, name="loader")
 loader_thread.start()
 
-global send_now
-send_now = False
-global some_condition
-some_condition = False
-
 
 def sender():
-    global some_condition
     sent = False
     bot = Bot(token="135232412:AAFfA6JImKl4sxv35IAw2f2Zjq7gb67Jk7Q")
     import time
@@ -144,10 +138,8 @@ def sender():
           time.localtime(time.time())[4] == 59 and \
           time.localtime(time.time())[5] == 59:
             sent = False
-        #if send_now or time.localtime(time.time())[3] >= 17 and cong < 7 and not sent:
-        if some_condition and not sent:
+        if send_now or time.localtime(time.time())[3] >= 17 and cong < 7 and not sent:
             sent = True
-            send_now = False
             for i in values:
                 try:
                     bot.sendMessage(i, text="Your registered update has occurred: the level of traffic congestion is now lower than 7.")
@@ -173,13 +165,6 @@ def status(bot, update):
                             text="Select the /registration command to register for updates.")
 
 
-def send_now_do(bot, update):
-    global send_now
-    send_now = True
-
-def set_val(a,b):
-    global some_condition
-    some_condition = True
 def main():
     # Create the EventHandler and pass it your bot's token.
     updater = Updater("135232412:AAFfA6JImKl4sxv35IAw2f2Zjq7gb67Jk7Q")
@@ -192,8 +177,6 @@ def main():
     dp.add_handler(CommandHandler("help", help))
     dp.add_handler(CommandHandler("registration", entered_value))
     dp.add_handler(CommandHandler("status", status))
-    dp.add_handler(CommandHandler("send", send_now_do))
-    dp.add_handler(CommandHandler("set", set_val))
     # on noncommand i.e message - echo the message on Telegram
     dp.add_handler(MessageHandler([Filters.text], entered_value))
     updater.dispatcher.add_handler(CallbackQueryHandler(confirm_value))
