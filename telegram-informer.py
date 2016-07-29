@@ -167,7 +167,7 @@ def status(bot, update):
 
 def main():
     # Create the EventHandler and pass it your bot's token.
-    updater = Updater("135232412:AAFfA6JImKl4sxv35IAw2f2Zjq7gb67Jk7Q")
+    updater = Updater(json.load(open("config.json")["token"]))
 
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
